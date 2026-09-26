@@ -1,4 +1,11 @@
 // Assignments are temporarily stored here.
+const SUPABASE_URL = 'https://afpecofwbxidnhqmtifg.supabase.co/rest/v1/';
+const SUPABASE_KEY = 'sb_publishable_EIci6-B-JsUFZby6eKmgHw_cMPqeEAA';
+
+const supabaseClient = window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+);
 // Later, we will use Supabase to save them permanently.
 const assignments = [];
 
