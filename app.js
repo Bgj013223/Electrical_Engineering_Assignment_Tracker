@@ -72,3 +72,96 @@ function renderAssignments() {
     list.append(item);
   }
 }
+// Find the account form and its controls.
+const authForm = document.querySelector('#auth-form');
+const emailInput = document.querySelector('#email');
+const passwordInput = document.querySelector('#password');
+const signupButton = document.querySelector('#signup-button');
+const logoutButton = document.querySelector('#logout-button');
+const accountInfo = document.querySelector('#account-info');
+const userEmail = document.querySelector('#user-email');
+const authMessage = document.querySelector('#auth-message');
+
+let currentUser = null;
+let authBusy = false;
+
+// Handle registration, login, and logout.
+async function handleAuth(action) {
+  if (authBusy) return;
+
+  if (action !== 'logout' && !authForm.reportValidity()) {
+    return;
+  }
+
+  authBusy = true;
+  authMessage.textContent = 'Please wait...';
+
+  try {
+    const credentials = {
+      email: emailInput.value.trim(),
+      password: passwordInput.value
+    };
+
+    if (action === 'signup') {
+      const { data, error } =
+        await supabaseClient.auth.signUp(credentials);
+
+      if (error) throw error;
+
+      authMessage.textContent = data.session
+        ? 'You are now logged in.'
+        : 'Check your email for a confirmation link before logging in.';
+    } else if (action === 'login') {
+      const { error } =
+        await supabaseClient.auth.signInWithPassword(credentials);
+
+      if (error) throw error;
+
+      authMessage.textContent = 'You are now logged in.';
+    } else {
+      const { error } =
+        await supabaseClient.auth.signOut({ scope: 'local' });
+
+      if (error) throw error;
+
+      authMessage.textContent = 'You are now logged out.';
+    }
+
+    passwordInput.value = '';
+  } catch (error) {
+    authMessage.textContent = error.message || 'Please try again.';
+  } finally {
+    authBusy = false;
+  }
+}
+
+authForm.addEventListener('submit', (event) => {
+  event.preventDefault();
+  handleAuth('login');
+});
+
+signupButton.addEventListener('click', () => {
+  handleAuth('signup');
+});
+
+logoutButton.addEventListener('click', () => {
+  handleAuth('logout');
+});
+
+// Update the page when someone logs in or out.
+supabaseClient.auth.onAuthStateChange((event, session) => {
+  const nextUser = session?.user ?? null;
+
+  // Clear temporary assignments when the account changes.
+  if (currentUser?.id !== nextUser?.id) {
+    assignments.length = 0;
+    renderAssignments();
+    form.reset();
+    message.textContent = '';
+  }
+
+  currentUser = nextUser;
+  authForm.hidden = Boolean(currentUser);
+  accountInfo.hidden = !currentUser;
+  userEmail.textContent = currentUser?.email ?? '';
+});
