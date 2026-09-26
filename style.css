@@ -1,0 +1,154 @@
+/* Apply consistent sizing to every element. */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: #f3f6fa;
+  color: #203047;
+  font-family: Arial, sans-serif;
+  line-height: 1.5;
+}
+
+/* Keep the page centered and readable. */
+header,
+main {
+  max-width: 900px;
+  margin: auto;
+  padding: 24px;
+}
+
+header {
+  padding-top: 40px;
+  padding-bottom: 0;
+}
+
+h1 {
+  font-size: 2rem;
+  line-height: 1.2;
+}
+
+h2 {
+  margin-top: 0;
+  font-size: 1.3rem;
+}
+
+.notice {
+  padding: 14px;
+  background: #e5edf9;
+  border-radius: 8px;
+}
+
+section {
+  margin-top: 24px;
+  padding: 24px;
+  background: white;
+  border: 1px solid #d7dfe9;
+  border-radius: 12px;
+}
+
+/* Arrange the main form fields in two columns. */
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: bold;
+}
+
+input,
+select,
+textarea,
+button {
+  font: inherit;
+}
+
+input,
+select,
+textarea {
+  width: 100%;
+  padding: 10px;
+  color: inherit;
+  background: white;
+  border: 1px solid #8998ab;
+  border-radius: 6px;
+}
+
+textarea {
+  resize: vertical;
+}
+
+button {
+  margin-top: 16px;
+  padding: 11px 20px;
+  border: 0;
+  border-radius: 6px;
+  background: #2458a6;
+  color: white;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #19417f;
+}
+
+:focus-visible {
+  outline: 3px solid #b76a00;
+  outline-offset: 3px;
+}
+
+#message {
+  margin-bottom: 0;
+}
+
+#message:empty {
+  display: none;
+}
+
+/* Style the assignments added by JavaScript. */
+#assignment-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.assignment {
+  padding: 18px 0;
+  border-top: 1px solid #d7dfe9;
+  overflow-wrap: anywhere;
+}
+
+.assignment h3 {
+  margin: 0 0 8px;
+}
+
+.assignment p {
+  margin: 6px 0;
+}
+
+.assignment .notes {
+  white-space: pre-wrap;
+}
+
+/* Use one column on phones and other small screens. */
+@media (max-width: 600px) {
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  header,
+  main {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  section {
+    padding: 18px;
+  }
+}
