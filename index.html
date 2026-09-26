@@ -15,6 +15,38 @@
   </header>
 
   <main>
+    <section aria-labelledby="account-heading">
+  <h2 id="account-heading">Your account</h2>
+
+  <form id="auth-form">
+    <label for="email">Email</label>
+    <input
+      id="email"
+      type="email"
+      autocomplete="email"
+      required
+    >
+
+    <label for="password">Password</label>
+    <input
+      id="password"
+      type="password"
+      autocomplete="current-password"
+      minlength="8"
+      required
+    >
+
+    <button type="submit">Log in</button>
+    <button type="button" id="signup-button">Create account</button>
+  </form>
+
+  <div id="account-info" hidden>
+    <p>Logged in as <span id="user-email"></span></p>
+    <button type="button" id="logout-button">Log out</button>
+  </div>
+
+  <p id="auth-message" role="status"></p>
+</section>
     <p class="notice">
       Practice version: assignments will clear when you refresh.
     </p>
