@@ -205,8 +205,3 @@ supabaseClient.auth.onAuthStateChange((event, session) => {
   accountInfo.hidden = !currentUser;
   userEmail.textContent = currentUser?.email ?? '';
 });
-  currentUser = nextUser;
-  authForm.hidden = Boolean(currentUser);
-  accountInfo.hidden = !currentUser;
-  userEmail.textContent = currentUser?.email ?? '';
-});
