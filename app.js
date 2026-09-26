@@ -1,5 +1,5 @@
 // Assignments are temporarily stored here.
-const SUPABASE_URL = 'https://afpecofwbxidnhqmtifg.supabase.co/rest/v1/';
+const SUPABASE_URL = 'https://afpecofwbxidnhqmtifg.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_EIci6-B-JsUFZby6eKmgHw_cMPqeEAA';
 
 const supabaseClient = window.supabase.createClient(
