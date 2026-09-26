@@ -1,4 +1,4 @@
-// Assignments are temporarily stored here.
+// Connect to Supabase.
 const SUPABASE_URL = 'https://afpecofwbxidnhqmtifg.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_EIci6-B-JsUFZby6eKmgHw_cMPqeEAA';
 
@@ -6,42 +6,92 @@ const supabaseClient = window.supabase.createClient(
   SUPABASE_URL,
   SUPABASE_KEY
 );
-// Later, we will use Supabase to save them permanently.
+
+// Keep a list of assignments currently displayed on the page.
 const assignments = [];
 
+// Find the assignment form and list.
 const form = document.querySelector('#assignment-form');
 const list = document.querySelector('#assignment-list');
 const emptyMessage = document.querySelector('#empty-message');
 const message = document.querySelector('#message');
 
-// Run this code when the user submits the form.
-form.addEventListener('submit', (event) => {
-  // Stop the form from reloading the page.
+// Find the account form and its controls.
+const authForm = document.querySelector('#auth-form');
+const emailInput = document.querySelector('#email');
+const passwordInput = document.querySelector('#password');
+const signupButton = document.querySelector('#signup-button');
+const logoutButton = document.querySelector('#logout-button');
+const accountInfo = document.querySelector('#account-info');
+const userEmail = document.querySelector('#user-email');
+const authMessage = document.querySelector('#auth-message');
+
+let currentUser = null;
+let authBusy = false;
+let savingAssignment = false;
+
+// Save an assignment when the form is submitted.
+form.addEventListener('submit', async (event) => {
   event.preventDefault();
 
-  // Read the values entered into the form.
+  if (!currentUser) {
+    message.textContent = 'Please log in before adding an assignment.';
+    return;
+  }
+
+  if (savingAssignment) return;
+
   const assignment = {
     course: form.elements.course.value.trim(),
     title: form.elements.title.value.trim(),
-    dueDate: form.elements.dueDate.value,
+    due_date: form.elements.dueDate.value,
     status: form.elements.status.value,
-    notes: form.elements.notes.value.trim()
+    notes: form.elements.notes.value.trim(),
+    user_id: currentUser.id
   };
 
-  // Prevent a course or assignment name containing only spaces.
   if (!assignment.course || !assignment.title) {
     message.textContent =
       'Please enter a course and assignment name, not just spaces.';
     return;
   }
 
-  assignments.push(assignment);
-  renderAssignments();
+  const submitButton = form.querySelector('button[type="submit"]');
+  savingAssignment = true;
+  submitButton.disabled = true;
+  message.textContent = 'Saving assignment...';
 
-  // Clear the form so another assignment can be entered.
-  form.reset();
-  message.textContent = 'Assignment added to this practice page.';
-  form.elements.course.focus();
+  try {
+    // Save the assignment and retrieve the saved row.
+    const { data, error } = await supabaseClient
+      .from('assignments')
+      .insert(assignment)
+      .select()
+      .single();
+
+    if (error) throw error;
+
+    // Only display the result if the same user is still logged in.
+    if (currentUser?.id !== assignment.user_id) return;
+
+    assignments.push({
+      ...data,
+      dueDate: data.due_date
+    });
+
+    renderAssignments();
+    form.reset();
+    message.textContent = 'Assignment saved to the database.';
+    form.elements.course.focus();
+  } catch (error) {
+    if (currentUser?.id === assignment.user_id) {
+      message.textContent =
+        error.message || 'Could not save the assignment. Please try again.';
+    }
+  } finally {
+    savingAssignment = false;
+    submitButton.disabled = false;
+  }
 });
 
 // Display the assignments on the page.
@@ -72,18 +122,6 @@ function renderAssignments() {
     list.append(item);
   }
 }
-// Find the account form and its controls.
-const authForm = document.querySelector('#auth-form');
-const emailInput = document.querySelector('#email');
-const passwordInput = document.querySelector('#password');
-const signupButton = document.querySelector('#signup-button');
-const logoutButton = document.querySelector('#logout-button');
-const accountInfo = document.querySelector('#account-info');
-const userEmail = document.querySelector('#user-email');
-const authMessage = document.querySelector('#auth-message');
-
-let currentUser = null;
-let authBusy = false;
 
 // Handle registration, login, and logout.
 async function handleAuth(action) {
@@ -135,6 +173,7 @@ async function handleAuth(action) {
   }
 }
 
+// Connect the account buttons to their actions.
 authForm.addEventListener('submit', (event) => {
   event.preventDefault();
   handleAuth('login');
@@ -152,7 +191,8 @@ logoutButton.addEventListener('click', () => {
 supabaseClient.auth.onAuthStateChange((event, session) => {
   const nextUser = session?.user ?? null;
 
-  // Clear temporary assignments when the account changes.
+  // Clear the displayed list when the account changes.
+  // This does not delete assignments from the database.
   if (currentUser?.id !== nextUser?.id) {
     assignments.length = 0;
     renderAssignments();
@@ -160,6 +200,11 @@ supabaseClient.auth.onAuthStateChange((event, session) => {
     message.textContent = '';
   }
 
+  currentUser = nextUser;
+  authForm.hidden = Boolean(currentUser);
+  accountInfo.hidden = !currentUser;
+  userEmail.textContent = currentUser?.email ?? '';
+});
   currentUser = nextUser;
   authForm.hidden = Boolean(currentUser);
   accountInfo.hidden = !currentUser;
