@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Engineering Assignment Tracker</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <header>
+    <h1>Engineering Assignment Tracker</h1>
+    <p>Keep track of your courses, assignments, and deadlines.</p>
+  </header>
+
+  <main>
+    <p class="notice">
+      Practice version: assignments will clear when you refresh.
+    </p>
+
+    <section aria-labelledby="form-heading">
+      <h2 id="form-heading">Add an assignment</h2>
+
+      <form id="assignment-form">
+        <div class="form-grid">
+          <div>
+            <label for="course">Course</label>
+            <input id="course" name="course"
+              placeholder="e.g., Circuits I" maxlength="100" required>
+          </div>
+
+          <div>
+            <label for="title">Assignment name</label>
+            <input id="title" name="title"
+              placeholder="e.g., Lab report 1" maxlength="150" required>
+          </div>
+
+          <div>
+            <label for="due-date">Due date</label>
+            <input id="due-date" name="dueDate" type="date" required>
+          </div>
+
+          <div>
+            <label for="status">Status</label>
+            <select id="status" name="status">
+              <option>Not started</option>
+              <option>In progress</option>
+              <option>Completed</option>
+            </select>
+          </div>
+        </div>
+
+        <label for="notes">Notes (optional)</label>
+        <textarea id="notes" name="notes" rows="3"
+          maxlength="2000" placeholder="Instructions or reminders"></textarea>
+
+        <button type="submit">Add assignment</button>
+        <p id="message" role="status"></p>
+      </form>
+    </section>
+
+    <section aria-labelledby="list-heading">
+      <h2 id="list-heading">Your assignments</h2>
+      <p id="empty-message">No assignments yet. Add your first one above.</p>
+      <ul id="assignment-list"></ul>
+    </section>
+  </main>
+</body>
+</html>
