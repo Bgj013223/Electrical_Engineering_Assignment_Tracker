@@ -6,97 +6,118 @@
   <title>Engineering Assignment Tracker</title>
   <link rel="stylesheet" href="style.css">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
-<script src="app.js" defer></script>
+  <script src="app.js" defer></script>
 </head>
 <body>
   <header>
+    <p class="eyebrow">YOUR COURSEWORK, ORGANIZED</p>
     <h1>Engineering Assignment Tracker</h1>
     <p>Keep track of your courses, assignments, and deadlines.</p>
   </header>
 
   <main>
     <section aria-labelledby="account-heading">
-  <h2 id="account-heading">Your account</h2>
+      <h2 id="account-heading">Your account</h2>
 
-  <form id="auth-form">
-    <label for="email">Email</label>
-    <input
-      id="email"
-      type="email"
-      autocomplete="email"
-      required
-    >
+      <form id="auth-form">
+        <div class="form-grid">
+          <div>
+            <label for="email">Email</label>
+            <input id="email" type="email" autocomplete="email" required>
+          </div>
 
-    <label for="password">Password</label>
-    <input
-      id="password"
-      type="password"
-      autocomplete="current-password"
-      minlength="8"
-      required
-    >
+          <div>
+            <label for="password">Password</label>
+            <input id="password" type="password"
+              autocomplete="current-password" minlength="8" required>
+          </div>
+        </div>
 
-    <button type="submit">Log in</button>
-    <button type="button" id="signup-button">Create account</button>
-  </form>
+        <p>Use at least 8 characters when creating a password.</p>
 
-  <div id="account-info" hidden>
-    <p>Logged in as <span id="user-email"></span></p>
-    <button type="button" id="logout-button">Log out</button>
-  </div>
+        <button type="submit">Log in</button>
+        <button type="button" id="signup-button" class="secondary">
+          Create account
+        </button>
+      </form>
 
-  <p id="auth-message" role="status"></p>
-</section>
+      <div id="account-info" hidden>
+        <p>Logged in as <strong id="user-email"></strong></p>
+        <button type="button" id="logout-button" class="secondary">
+          Log out
+        </button>
+      </div>
+
+      <p id="auth-message" role="status"></p>
+    </section>
+
     <p class="notice">
-      Practice version: assignments will clear when you refresh.
+      Log in to manage your assignments.
+      Saved assignments stay available after refreshing.
     </p>
 
     <section aria-labelledby="form-heading">
       <h2 id="form-heading">Add an assignment</h2>
 
       <form id="assignment-form">
-        <div class="form-grid">
-          <div>
-            <label for="course">Course</label>
-            <input id="course" name="course"
-              placeholder="e.g., Circuits I" maxlength="100" required>
+        <fieldset id="assignment-fields" disabled>
+          <div class="form-grid">
+            <div>
+              <label for="course">Course</label>
+              <input id="course" name="course" maxlength="100"
+                placeholder="e.g., Circuits I" required>
+            </div>
+
+            <div>
+              <label for="title">Assignment name</label>
+              <input id="title" name="title" maxlength="150"
+                placeholder="e.g., Lab report 1" required>
+            </div>
+
+            <div>
+              <label for="due-date">Due date</label>
+              <input id="due-date" name="dueDate" type="date" required>
+            </div>
+
+            <div>
+              <label for="status">Status</label>
+              <select id="status" name="status">
+                <option>Not started</option>
+                <option>In progress</option>
+                <option>Completed</option>
+              </select>
+            </div>
           </div>
 
-          <div>
-            <label for="title">Assignment name</label>
-            <input id="title" name="title"
-              placeholder="e.g., Lab report 1" maxlength="150" required>
-          </div>
+          <label for="notes">Notes (optional)</label>
+          <textarea id="notes" name="notes" rows="3" maxlength="2000"
+            placeholder="Instructions or reminders"></textarea>
 
-          <div>
-            <label for="due-date">Due date</label>
-            <input id="due-date" name="dueDate" type="date" required>
-          </div>
-
-          <div>
-            <label for="status">Status</label>
-            <select id="status" name="status">
-              <option>Not started</option>
-              <option>In progress</option>
-              <option>Completed</option>
-            </select>
-          </div>
-        </div>
-
-        <label for="notes">Notes (optional)</label>
-        <textarea id="notes" name="notes" rows="3"
-          maxlength="2000" placeholder="Instructions or reminders"></textarea>
-
-        <button type="submit">Add assignment</button>
-        <p id="message" role="status"></p>
+          <button id="save-button" type="submit">Add assignment</button>
+          <button id="cancel-button" type="button"
+            class="secondary" hidden>
+            Cancel edit
+          </button>
+        </fieldset>
       </form>
+
+      <p id="message" role="status"></p>
     </section>
 
     <section aria-labelledby="list-heading">
-      <h2 id="list-heading">Your assignments</h2>
-      <p id="empty-message">No assignments yet. Add your first one above.</p>
+      <div class="section-heading">
+        <h2 id="list-heading">Your assignments</h2>
+        <button id="reload-button" class="secondary"
+          type="button" disabled>
+          Reload list
+        </button>
+      </div>
+
+      <p id="empty-message">Log in to see your assignments.</p>
       <ul id="assignment-list"></ul>
     </section>
+
+    <noscript>Please enable JavaScript to use this tracker.</noscript>
   </main>
 </body>
 </html>
