@@ -1,6 +1,10 @@
-/* Apply consistent sizing to every element. */
+/* Page layout and shared styles. */
 * {
   box-sizing: border-box;
+}
+
+[hidden] {
+  display: none !important;
 }
 
 body {
@@ -11,7 +15,6 @@ body {
   line-height: 1.5;
 }
 
-/* Keep the page centered and readable. */
 header,
 main {
   max-width: 900px;
@@ -25,13 +28,21 @@ header {
 }
 
 h1 {
-  font-size: 2rem;
+  margin: 8px 0;
+  font-size: clamp(1.8rem, 5vw, 2.4rem);
   line-height: 1.2;
 }
 
 h2 {
   margin-top: 0;
   font-size: 1.3rem;
+}
+
+.eyebrow {
+  color: #2859a0;
+  font-size: 0.8rem;
+  font-weight: bold;
+  letter-spacing: 0.1em;
 }
 
 .notice {
@@ -48,7 +59,14 @@ section {
   border-radius: 12px;
 }
 
-/* Arrange the main form fields in two columns. */
+/* Form fields. */
+fieldset {
+  border: 0;
+  padding: 0;
+  margin: 0;
+  min-width: 0;
+}
+
 .form-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -84,10 +102,11 @@ textarea {
   resize: vertical;
 }
 
+/* Buttons and keyboard focus. */
 button {
   margin-top: 16px;
-  padding: 11px 20px;
-  border: 0;
+  padding: 11px 18px;
+  border: 1px solid transparent;
   border-radius: 6px;
   background: #2458a6;
   color: white;
@@ -98,20 +117,59 @@ button:hover {
   background: #19417f;
 }
 
+button.secondary {
+  background: white;
+  color: #2458a6;
+  border-color: #8998ab;
+}
+
+button.secondary:hover {
+  background: #e5edf9;
+}
+
+button.danger {
+  background: white;
+  color: #a32626;
+  border-color: #c78c8c;
+}
+
+button.danger:hover {
+  background: #fff0f0;
+}
+
+button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
 :focus-visible {
   outline: 3px solid #b76a00;
   outline-offset: 3px;
 }
 
-#message {
-  margin-bottom: 0;
+[role="status"] {
+  overflow-wrap: anywhere;
 }
 
-#message:empty {
+[role="status"]:empty {
   display: none;
 }
 
-/* Style the assignments added by JavaScript. */
+/* Assignment list. */
+.section-heading {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.section-heading h2,
+.section-heading button {
+  margin: 0;
+}
+
 #assignment-list {
   list-style: none;
   padding: 0;
@@ -132,11 +190,30 @@ button:hover {
   margin: 6px 0;
 }
 
-.assignment .notes {
+.notes {
   white-space: pre-wrap;
 }
 
-/* Use one column on phones and other small screens. */
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.badge {
+  display: inline-block;
+  border-radius: 4px;
+  background: #e5edf9;
+  padding: 3px 9px;
+  font-size: 0.9rem;
+}
+
+.badge.completed {
+  background: #ddf3e4;
+  color: #205e35;
+}
+
+/* Smaller screens use one column. */
 @media (max-width: 600px) {
   .form-grid {
     grid-template-columns: 1fr;
